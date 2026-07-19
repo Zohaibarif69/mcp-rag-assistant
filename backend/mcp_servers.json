@@ -1,0 +1,50 @@
+{
+  "servers": [
+    {
+      "name": "filesystem",
+      "description": "Read/list files in the backend/data directory",
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./data"],
+      "enabled": true
+    },
+    {
+      "name": "fetch",
+      "description": "Fetch a URL from the internet and extract its contents as markdown (official Python-based MCP reference server, run via uv/uvx)",
+      "transport": "stdio",
+      "command": "uvx",
+      "args": ["mcp-server-fetch"],
+      "enabled": true
+    },
+    {
+      "name": "github",
+      "description": "Search/read/manage GitHub repos, issues, and pull requests (GitHub's official MCP server, run via Docker)",
+      "transport": "stdio",
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-e", "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "-e", "GITHUB_TOOLSETS",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<your-github-personal-access-token>",
+        "GITHUB_TOOLSETS": "repos,issues,pull_requests"
+      },
+      "enabled": false
+    },
+    {
+      "name": "gdrive",
+      "description": "Search and read files from Google Drive (requires OAuth setup — see RAG_MCP_SETUP.md)",
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@isaacphi/mcp-gdrive"],
+      "env": {
+        "CLIENT_ID": "<your-google-oauth-client-id>",
+        "CLIENT_SECRET": "<your-google-oauth-client-secret>",
+        "GDRIVE_CREDS_DIR": "./data/gdrive-creds"
+      },
+      "enabled": false
+    }
+  ]
+}
